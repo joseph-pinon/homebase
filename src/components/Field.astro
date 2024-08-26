@@ -1,0 +1,209 @@
+---
+---
+
+<canvas id = "flow">
+</canvas>
+<style>
+
+canvas{
+  position:absolute;
+  width:100%;
+  height:100%;
+}
+</style>
+
+<script>
+
+import { createNoise2D } from 'simplex-noise'
+import FastNoiseLite from "fastnoise-lite";
+const noise2D = createNoise2D();
+
+let noise = new FastNoiseLite();
+noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+
+function Vector(x, y){
+  this.x = x
+  this.y = y
+
+  this.add = function (other){
+    return new Vector(this.x + other.x, this.y + other.y)
+  }
+}
+
+function Canvas(app){
+  this.app = app
+  this.element = document.getElementById("flow")
+  this.ctx = this.element.getContext("2d")
+
+  this.setup = function (){
+    this.bb = this.element.getBoundingClientRect();
+    this.element.width = this.bb.width * devicePixelRatio
+    this.element.height = this.bb.height * devicePixelRatio
+  }
+
+  this.clear = function (){
+    this.ctx.clearRect(0, 0, this.element.width, this.element.height)
+  }
+  this.drawCircle = function (position, radius, fill){
+    this.ctx.beginPath()
+    this.ctx.arc(position.x, position.y, radius, 0, 2 * Math.PI)
+    this.ctx.fillStyle = fill
+    this.ctx.fill()
+  }
+
+  this.drawLine = function (start, end, color, thickness, dash){
+    this.ctx.beginPath()
+    this.ctx.moveTo(start.x, start.y)
+    this.ctx.lineTo(end.x, end.y)
+    this.ctx.lineWidth = thickness
+    this.ctx.strokeStyle = color
+    this.ctx.stroke()
+  }
+
+  this.drawRectangle = function (start, width, height, color){
+    this.ctx.beginPath()
+    this.ctx.rect(start.x, start.y, width, height)
+    this.ctx.strokeStyle = color
+    this.ctx.stroke()
+  }
+
+  window.addEventListener("resize", (e) =>{
+    this.setup()
+  })
+
+  this.element.addEventListener("mousemove", (e) =>{
+    this.app.mousePos = new Vector(e.clientX * devicePixelRatio, e.clientY * devicePixelRatio )
+
+  })
+  this.element.addEventListener("mouseenter", (e) =>{
+    this.app.mouseActive = true
+
+  })
+  this.element.addEventListener("mouseleave", (e) =>{
+    this.app.mouseActive = false
+  })
+}
+
+function Particle(){
+  this.pos = new Vector(0, 0)
+  this.lifeTime = 0
+
+  this.move = function (velocity){
+    this.pos = this.pos.add(velocity)
+    this.lifeTime += 1
+  }
+
+  this.spawn = function(x, y){
+    this.pos = new Vector(x, y)
+    this.lifeTime = 0
+  }
+}
+
+function Manager(app){
+  this.app = app
+  this.particles = new Array()
+  this.speed = 1
+  this.scale = 10
+  this.offset = 0
+
+  this.maxRange = 10000
+
+
+  this.setup = function(){
+    this.particles = new Array(this.app.count)
+    for (let i = 0; i < this.app.count; i++){
+      let particle = new Particle() 
+      this.spawn(particle)
+      this.particles[i] = particle
+    }
+  }
+
+  this.update = function (){
+    for (let i = 0; i < this.app.count; i++){
+      let particle = this.particles[i]
+      let pSpeed = this.speed + Math.random();
+      let pOffset = this.offset;
+
+      if (this.app.mouseActive){
+        let disp = new Vector(particle.pos.x - this.app.mousePos.x, particle.pos.y - this.app.mousePos.y)
+        let dist = disp.x ** 2 + disp.y ** 2
+        let strength = Math.max(this.maxRange - dist, 0)/this.maxRange
+        pOffset += 1000*strength
+      }
+
+      let x = (particle.pos.x + pOffset)/this.scale 
+      let y = (particle.pos.y - pOffset)/this.scale 
+      let value = noise.GetNoise(x, y)
+      let angle = value * Math.PI + 2 * Math.random()
+
+      let velocity = new Vector(pSpeed * Math.cos(angle), pSpeed * Math.sin(angle))
+      particle.move(velocity)
+      this.checkBorder(particle)
+    }
+    this.offset += 1
+  }
+
+  this.spawn = function (particle){
+    let x = this.app.canvas.element.width * Math.random()
+    let y = this.app.canvas.element.height * Math.random()
+    particle.spawn(x, y) 
+  }
+
+  this.checkBorder = function (particle){
+    if (particle.pos.x < 0) {
+      this.spawn(particle)
+    }
+    else if (particle.pos.x > this.app.canvas.element.width) {
+      this.spawn(particle)
+    }
+
+    if (particle.pos.y < 0) {
+      this.spawn(particle)
+    }
+
+    else if (particle.pos.y > this.app.canvas.element.height) {
+      this.spawn(particle)
+    }
+  }
+
+  this.draw = function(canvas){
+    for (let i = 0; i < this.app.count; i++){
+      let particle = this.particles[i]
+
+      let time = Math.max(particle.lifeTime, 255)/2
+      let color = `rgb(${time} ${time} ${time})`
+      canvas.drawCircle(particle.pos, 1, color)
+    }
+  }
+}
+
+function App (count){
+  this.count = count
+  this.mousePos = new Vector(0, 0) 
+  this.mouseActive = false
+
+  this.run = function(){
+    this.canvas = new Canvas(app)
+    this.canvas.setup()
+    this.manager = new Manager(this)
+    this.manager.setup()
+    this.update()
+  }
+
+  this.update = () => {
+    this.manager.update()
+    this.redrawAll()
+    window.requestAnimationFrame(this.update)
+  }
+
+  this.redrawAll = function (){
+    this.canvas.clear()
+    this.manager.draw(this.canvas)
+  }
+}
+
+let app = new App(10000)
+app.run()
+
+</script>
+

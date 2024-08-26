@@ -1,0 +1,178 @@
+---
+---
+
+<canvas id = "flow">
+</canvas>
+<style>
+
+canvas{
+  position:absolute;
+  width:100%;
+  height:100%;
+}
+</style>
+
+<script>
+
+import { createNoise2D } from 'simplex-noise'
+
+const noise2D = createNoise2D();
+// returns a value between -1 and 1
+console.log(noise2D(2, 2));
+
+
+function Vector(x, y){
+  this.x = x
+  this.y = y
+
+  this.add = function (other){
+    return new Vector(this.x + other.x, this.y + other.y)
+  }
+  this.normalize = function(){
+    let mag = Math.sqrt(this.x * this.x + this.y * this.y)
+    this.x = this.x/mag
+    this.y = this.y/mag
+  }
+}
+
+function Canvas(){
+  this.element = document.getElementById("flow")
+  this.ctx = this.element.getContext("2d")
+
+  this.setup = function (){
+    this.bb = this.element.getBoundingClientRect();
+    this.element.width = this.bb.width * devicePixelRatio
+    this.element.height = this.bb.height * devicePixelRatio
+  }
+
+  this.clear = function (){
+    this.ctx.clearRect(0, 0, this.element.width, this.element.height)
+  }
+  this.drawCircle = function (position, radius, fill){
+    this.ctx.beginPath()
+    this.ctx.arc(position.x, position.y, radius, 0, 2 * Math.PI)
+    this.ctx.fillStyle = fill
+    this.ctx.fill()
+  }
+
+  this.drawLine = function (start, end, color, thickness, dash){
+    this.ctx.beginPath()
+    this.ctx.moveTo(start.x, start.y)
+    this.ctx.lineTo(end.x, end.y)
+    this.ctx.lineWidth = thickness
+    this.ctx.strokeStyle = color
+    this.ctx.stroke()
+  }
+
+  this.drawRectangle = function (start, width, height, color){
+    this.ctx.beginPath()
+    this.ctx.rect(start.x, start.y, width, height)
+    this.ctx.strokeStyle = color
+    this.ctx.stroke()
+  }
+
+  window.addEventListener("resize", (e) =>{
+    this.setup()
+  })
+}
+
+function Particle(x, y, vx, vy){
+  this.pos = new Vector(x, y)
+  this.dir = new Vector(vx, vy)
+  this.dir.normalize()
+
+  this.move = function (speed){
+    let amountMoved = new Vector(speed * this.dir.x, speed * this.dir.y)
+    this.pos = this.pos.add(amountMoved)
+  }
+
+  this.angle = function(){
+    return Math.atan2(this.pos.y, this.pos.x)
+  }
+
+  this.rebound = function (normal){
+    this.dot = this.dir.x * normal.x + this.dir.y * normal.y
+    let delta = new Vector (2 * this.dot * normal.x, 2 * this.dot * normal.y)
+    this.dir = new Vector (this.dir.x - delta.x, this.dir.y - delta.y) 
+  }
+}
+
+function Manager(app){
+  this.app = app
+  this.particles = new Array()
+
+  this.setup = function(){
+    this.particles = new Array(this.app.count)
+    for (let i = 0; i < this.app.count; i++){
+      let x = this.app.canvas.element.width * Math.random()
+      let y = this.app.canvas.element.height * Math.random()
+      let vx = 2 * Math.random() - 1
+      let vy = 2 * Math.random() - 1
+      this.particles[i] = new Particle(x, y, vx, vy) 
+    }
+  }
+
+  this.update = function (){
+    for (let i = 0; i < this.app.count; i++){
+      let particle = this.particles[i]
+      particle.move(1)
+      this.checkBorder(particle)
+    }
+  }
+
+  this.checkBorder = function (particle){
+    if (particle.pos.x < 0) {
+      particle.rebound(new Vector(1, 0))
+      particle.pos.x = 0
+    }
+    else if (particle.pos.x > this.app.canvas.element.width) {
+      particle.rebound(new Vector(-1, 0))
+      particle.pos.x = this.app.canvas.element.width
+    }
+
+    if (particle.pos.y < 0) {
+      particle.rebound(new Vector(0, 1))
+      particle.pos.y = 0
+    }
+
+    else if (particle.pos.y > this.app.canvas.element.height) {
+      particle.rebound(new Vector(0, -1))
+      particle.pos.y = this.app.canvas.element.height
+    }
+  }
+  this.draw = function(canvas){
+    for (let i = 0; i < this.app.count; i++){
+      let particle = this.particles[i]
+      canvas.drawCircle(particle.pos, 1, "white")
+    }
+  }
+}
+
+function App (count){
+  this.count = count
+
+  this.run = function(){
+    this.canvas = new Canvas()
+    this.canvas.setup()
+    this.manager = new Manager(this)
+    this.manager.setup()
+    this.update()
+  }
+
+  this.update = () => {
+    this.manager.update()
+    this.redrawAll()
+    window.requestAnimationFrame(this.update)
+  }
+
+  this.redrawAll = function (){
+    this.canvas.clear()
+    this.manager.draw(this.canvas)
+  }
+}
+
+let app = new App(1000)
+app.run()
+
+</script>
+

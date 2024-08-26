@@ -1,5 +1,9 @@
 ---
-
+import Header from "../components/Header.astro"
+import "../styles/global.css"
+import Flow from "../components/Flow.astro"
+import Field from "../components/Field.astro"
+import Link from "../components/Link.astro"
 ---
 
 <html lang="en">
@@ -8,9 +12,133 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>Joseph Pinon</title>
 	</head>
 	<body>
-		<h1>Astro</h1>
+    <Field/>
+    <div class = "intro">
+      <h1>Hello, I'm <mark>Joseph</mark>.</h1>
+      <div class = "slider-wrapper">I am 
+        <div class = "slider">
+          <div class = "slider-text-1">a problem solver</div>
+          <div class = "slider-text-2">an engineer</div>
+          <div class = "slider-text-3">an officer</div>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li>
+            <Link title = "ABOUT" href = "/about"/>
+          </li>
+          <li>
+            <Link title = "PROJECTS" href = "/about"/>
+          </li>
+          <li>
+            <Link title = "BLOG" href = "/about"/>
+          </li>
+          <li>
+            <Link title = "ARTWORK" href = "/about"/>
+          </li>
+        </ul>
+      </nav>
+    </div>
 	</body>
 </html>
+
+<style>
+
+.intro{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -75%);
+  font-size: 2rem;
+
+  padding:2rem;
+
+  animation-duration: 1s;
+  animation-name: slideup;
+  color: var(--day1);
+  user-select: none;
+  text-align: center;
+}
+
+nav {
+  position:relative;
+  font-size: 2rem;
+  color: var(--day1);
+  user-select: none;
+}
+
+ul{
+  display:flex;
+  justify-content: space-evenly;
+  list-style: none;
+}
+
+li{
+  margin: 1rem;
+}
+
+mark{
+  color: var(--set0);
+  background-color: transparent;
+}
+
+@keyframes slideup {
+  from {
+  translate: 0 25%;
+  }
+}
+.slider-wrapper{
+  display: flex;
+  justify-content: center;
+}
+
+.slider{
+  height: 3rem;
+  overflow: hidden;
+  margin-left: 1rem;
+}
+
+.slider-text-1{
+  animation: slide 5s linear infinite;
+}
+
+.slider div {
+  height: 3rem;
+  text-align: center;
+}
+
+@keyframes slide {
+  0% {
+    margin-top: -9rem;
+  }
+  5% {
+    /* For stopping effect */
+    margin-top: -6rem;
+  }
+  33% {
+    margin-top: -6rem;
+  }
+  38% {
+    /* For stopping effect */
+    margin-top: -3rem;
+  }
+  66% {
+    margin-top: -3rem;
+  }
+  71% {
+    /* For stopping effect */
+    margin-top: 0px;
+  }
+  100% {
+    margin-top: 0px;
+  }
+}
+
+
+
+
+</style>
+

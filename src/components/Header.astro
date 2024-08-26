@@ -1,0 +1,77 @@
+---
+import "../styles/global.css"
+import Link from "./Link.astro"
+import Switch from "./Switch.astro"
+---
+<header> 
+  <a href = "/">JGP</a>
+  <nav> 
+    <ul>
+      <li>
+        <Link title = "HOME" href = "/"/>
+      </li>
+      <li>
+        <Link title = "ABOUT"/>
+      </li>
+      <li>
+        <Link title = "PROJECTS"/>
+      </li>
+      <li>
+        <Link title = "BLOG"/>
+      </li>
+    </ul>     
+  </nav>
+
+</header>
+
+<style>
+a {
+  z-index: 10;
+  text-decoration: none;
+  vertical-align: baseline;
+}
+
+a:hover{
+  cursor: pointer;
+  color: var(--set0);
+  transition: 1s;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+nav{
+  display: flex;
+}
+
+header{
+  display: flex;
+  font-size: 1rem;
+  justify-content: space-between;
+  padding-top:1rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  /* animation-name: slideIn; */
+  animation-duration: 1s;
+}
+
+ul{
+  display: flex;
+  list-style: none;
+}
+
+li{
+  text-decoration: none;
+  text-wrap: nowrap;
+  transition: 0.5s;
+}
+
+@keyframes slideIn{
+from{
+  translate: 0 -100%
+}
+}
+
+
+</style>
+

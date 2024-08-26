@@ -1,0 +1,26 @@
+---
+import "../styles/global.css"
+const {title} = Astro.props
+const {href} = Astro.props
+---
+<a href = {href}>
+  {title}
+</a>
+
+<style>
+a {
+  font-size: 1rem;
+  /* border: 1px solid rgba(255,255,255,0.02); */
+  padding: 1rem;
+  transition: 1s;
+  /* border-radius: 0; */
+  text-decoration: none;
+  backdrop-filter: blur(2px);
+}
+
+a:hover{
+  transition: 1s;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--set0);
+}
+</style>
