@@ -1,0 +1,25 @@
+---
+import "../styles/global.css"
+import Header from "../components/Header.astro"
+import BlogPost from "../components/BlogPost.astro";
+const allPosts = await Astro.glob('./posts/*.md');
+---
+<html lang="en">
+  <head>
+    <title>Blog</title>
+  </head>
+  <body>
+    <Header/>
+    <main>
+      {allPosts.map((post) => <BlogPost url={post.url} title={post.frontmatter.title} date={post.frontmatter.pubDate} desc={post.frontmatter.description} tags={post.frontmatter.tags}/>)}
+    </main>
+  </body>
+</html>
+
+<style>
+main{
+  width: 70ch;
+  margin: auto;
+  margin-top: 1rem;
+}
+</style>

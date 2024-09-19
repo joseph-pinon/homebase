@@ -1,5 +1,6 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gloock&display=swap');
+
 :root{
   --dusk0 : #17131c;
   --dusk1 : #1e1a23;
@@ -21,20 +22,65 @@
 }
 
 *{
-  /* box-sizing: border-box; */
+  box-sizing: border-box;
   padding: 0rem;
   margin: 0rem;
-
   font-family: "Montserrat", sans-serif;
+
   font-weight: 300;
   color: var(--day1);
 }
 
 body{
-  background-color: var(--dusk1);
+  background-color: var(--dusk0);
+}
+main{
+  max-width: 75ch;
+  margin-left: 25%; 
+  margin-right: 25%;
+  margin-top: 5rem;
+  animation-name: fadein;
+  animation-duration: 1s;
+}
+
+@media screen and (max-width:1000px){
+  main{
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
 }
 
 ::selection {
   color: var(--dusk0);
   background: var(--day0);
+}
+
+h1{
+  font-family: "Gloock", serif;
+  font-size: clamp(1rem, 5vw, 6rem);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+h2{
+  font-family: "Gloock", serif;
+  font-size: clamp(1rem, 5vw, 3rem);
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+h3{
+  color: var(--set0);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+p{
+  font-family: "Montserrat", sans-serif;
+  line-height: 1.5;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  text-align: left;
+  text-wrap: wrap;
 }

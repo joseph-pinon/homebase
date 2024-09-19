@@ -1,0 +1,41 @@
+---
+import "../styles/global.css"
+const {title} = Astro.props
+const {url} = Astro.props
+const {date} = Astro.props
+const {desc} = Astro.props
+---
+<article>
+  <a href = {url}>
+    <h2>{title}</h2>
+    <h3>{date}</h3>
+    <p>
+      {desc}
+    </p>
+  </a>
+</article>
+
+<style>
+article{
+}
+a {
+  display:block;
+  padding: 1rem;
+  transition: 1s;
+  text-decoration: none;
+}
+p{
+  margin-top: 1rem;
+}
+
+a:hover{
+  transition: 1s;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--set0);
+}
+</style>
+
+<script>
+
+</script>
+

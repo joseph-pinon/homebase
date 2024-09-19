@@ -1,38 +1,31 @@
 ---
 import "../styles/global.css"
+import BaseLayout from "../layouts/BaseLayout.astro"
 import Header from "../components/Header.astro"
 import Field from "../components/Field.astro"
 ---
-<html lang="en">
-  <head>
-    <title>About</title>
-  </head>
-  <body>
-    <Header/>
-    <section>
-      <h1>ABOUT ME</h1>
-      <p>
-        My name is <mark>Joseph G. Pinon</mark>. I grew up in <mark>Oakland, CA</mark>. 
-        I enjoy exploring the fields of computer science, data analysis, thermodynamics, computational fluid dynamics and game development. I recieved my Bachelors and Masters of Science in Mechanical Engineering from <mark>Carnegie Mellon University</mark>. Currently I am working as an Air Battle Manager in the United States Air Force.
-      </p>
-      <h2>MY PURPOSE</h2>
-      <article>
-        <div class = "card">
-          <h3>I</h3>
-          Inspire others through my work and experiences.
-        </div>
-        <div class = "card">
-          <h3>II</h3>
-          Hold myself accountable to studying demanding topics
-        </div>
-        <div class = "card">
-          <h3>III</h3>
-          Propose unique solutions to challenging problems
-        </div>
-      </article>
-    </section>
-  </body>
-</html>
+<BaseLayout title = "About">
+  <h1>Biography</h1>
+  <p>
+    My name is <mark>Joseph G. Pinon</mark>. I grew up in <mark>Oakland, CA</mark>. 
+    I enjoy exploring the fields of computer science, data analysis, thermodynamics, computational fluid dynamics and game development. I recieved my Bachelors and Masters of Science in Mechanical Engineering from <mark>Carnegie Mellon University</mark>. Currently I am working as an Air Battle Manager in the United States Air Force.
+  </p>
+  <h2>My Purpose</h2>
+  <!-- <article> -->
+  <!--   <div class = "card"> -->
+  <!--     <h3>I</h3> -->
+  <!--     Inspire others through my work and experiences. -->
+  <!--   </div> -->
+  <!--   <div class = "card"> -->
+  <!--     <h3>II</h3> -->
+  <!--     Hold myself accountable to studying demanding topics -->
+  <!--   </div> -->
+  <!--   <div class = "card"> -->
+  <!--     <h3>III</h3> -->
+  <!--     Propose unique solutions to challenging problems -->
+  <!--   </div> -->
+  <!-- </article> -->
+</BaseLayout>
 
 <style>
 article{
@@ -50,33 +43,6 @@ article{
   text-align: center;
 }
 
-section{
-  width: 75ch;
-  margin-left: 20%;
-  margin-top: 5rem;
-  animation-name: fadein;
-  animation-duration: 1s;
-}
-h1{
-  font-size: 5rem;
-  margin-bottom: 2rem;
-}
-h2{
-  margin-top: 3rem;
-  margin-bottom: 1rem;
-  font-size: 3rem;
-}
-h3{
-  color: var(--set0);
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-p {
-  font-size: 1.5rem;
-  text-align: left;
-  text-wrap: wrap;
-}
 mark{
   color: var(--set0);
   background-color: transparent;
