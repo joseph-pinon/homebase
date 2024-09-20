@@ -36,9 +36,10 @@ body{
 }
 main{
   max-width: 75ch;
-  margin-left: 25%; 
-  margin-right: 25%;
+  margin-left: clamp(15%, 100vw - 1200px,25%);
+  margin-right: auto;
   margin-top: 5rem;
+
   /* animation-name: fadein; */
   /* animation-duration: 1s; */
 }
@@ -49,14 +50,14 @@ main{
 
 h1{
   font-family: "Gloock", serif;
-  font-size: clamp(3rem, 5vw, 6rem);
+  font-size: clamp(5rem, 7vw, 7rem);
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
 
 h2{
   font-family: "Gloock", serif;
-  font-size: clamp(1rem, 5vw, 3rem);
+  font-size: clamp(1rem, 10vw, 3rem);
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
 }
@@ -77,12 +78,17 @@ p{
   text-wrap: wrap;
 }
 
-@media screen and (max-width:800px){
+@media screen and (max-width:1000px){
   main{
-    margin-left: 1rem;
-    margin-right: 1rem;
+    margin-left: max(1rem, calc(50% - 75ch / 2));
+    margin-right: max(1rem, calc(50% - 75ch / 2));
+  }
+}
+@media screen and (max-width:400px){
+  h1{
+    font-size: 4rem;
   }
   p{
-    font-size: 1.125rem;
+    font-size: 1rem;
   }
 }
